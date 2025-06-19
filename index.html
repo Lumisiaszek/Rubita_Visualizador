@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es-ar">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>LA RUBITA - SIT</title> <!-- Este es el titulo que se ve en la pestaña web  -->
+        <link rel="shortcut icon" href="./assets/img/logo_icono.png" />
+
+
+        <!-- Estilos de leaflet de las herramientas  -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.css"/>
+        
+      
+
+        <!-- Estilos propios para visualizador  -->
+        <link rel="stylesheet" href="./style/style.css"/>
+
+        <!-- Fuente utilizada  -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    </head>
+    
+    <body>             
+            <div class="contenedor_titulo">
+                <div class="logos">
+                    <a href="https://produccion.chaco.gov.ar/"><img src="./assets/img/logomin_icono.png" alt=""></a>
+                    <div class="linea-vertical"></div>
+                    <a href="https://sit.chaco.gob.ar/"><img src="./assets/img/logo_icono.png" alt=""></a>
+                </div>
+                <div class="titulomapa">
+                    <h2>LA RUBITA - CHACO</h2> 
+                    <input type="text" id="inputCategoria" placeholder="Buscar por categoria" onkeyup="filtrarPorCategoria()" />
+                    <button onclick="limpiarFiltro()">Limpiar</button>
+                </div>  
+            </div>
+
+    
+
+            <!-- Botón para ocultar/mostrar el panel -->
+            <div id="toggle-panel-btn" onclick="togglePanel()">
+                <img src="./assets/iconos/flechaizq.png" id="toggle-icon" alt="Mostrar/Ocultar Panel"/>
+            </div>
+
+
+        <div class="contenedorpanel" id="contenedorpanel">
+        <!-- Panel de capas a la izquierda  -->
+            <div id="layers-panel">
+                <div id="layers-content">
+                    <h3>PANEL DE CAPAS</h3>   
+                </div>   
+            </div>
+                <div class="refmapa">
+                    <h3>REFERENCIAS</h3>
+                    <div class="referencia-item">
+                        <div class="referencia-icon punto"></div>
+                        <span>Localidades</span>
+                    </div>
+                    <div class="referencia-item">
+                        <div class="referencia-icon lineanac"></div>
+                        <span>Red vial nacional</span>
+                    </div>
+                    <div class="referencia-item">
+                        <div class="referencia-icon lineaprov"></div>
+                        <span>Red vial provincial</span>
+                    </div>
+                    <div class="referencia-item">
+                        <div class="referencia-icon ejidos"></div>
+                        <span>Ejido municipal</span>
+                    </div>
+                    <div class="referencia-item">
+                        <div class="referencia-icon areaurb"></div>
+                        <span>Área urbana</span>
+                    </div>
+                </div>
+            </div>           
+             
+            <div id="contenedor_botones">
+                <div id="ubicActual">
+                    <button onclick="goToMyLocation()">
+                    <img src="./assets/iconos/ubication.png" alt="Ubicación actual" title="¿Donde estoy?">
+                    </button>
+                    <hr>
+                </div>
+
+                <div id="medirMenu">
+                    <button id="toggleMedirMenu" onclick="toggleHerramientaMedir()">
+                        <img src="./assets/iconos/H_medir.png" alt="Medir" title="Medir distancia">
+                    </button>
+                    <hr>
+                    <div id="medirButtons" style="display: none;">
+                        <button onclick="activarMedicion()">
+                            <img src="./assets/iconos/distance.png" alt="Dibujar línea" title="Medir">
+                        </button>
+                        <button onclick="startDelete()">
+                            <img src="./assets/iconos/H_borr.png" alt="Borrar" title="Borrar">
+                        </button>
+                        <hr>
+                    </div>
+                </div>
+
+                <div id="drawMenu">
+                    <button id="toggleDrawMenu"><img src="./assets/iconos/H_lapiz.png" alt="Dibujar" title="Dibujar"></button>
+                        <hr>
+                    <div id="drawButtons">
+                        <button onclick="startDraw('marker')"><img src="./assets/iconos/H_ubic.png" alt="Punto" title="Punto"></button>
+                        <button onclick="startDraw('polyline')"><img src="./assets/iconos/H_line.png" alt="Linea" title="Linea"></button>
+                        <button onclick="startDraw('polygon')"><img src="./assets/iconos/H_pol.png" alt="Poligono" title="Poligono"></button>
+                        <button onclick="startDraw('rectangle')"><img src="./assets/iconos/H_rect.png" alt="Rectangulo" title="Rectangulo"></button>
+                        <button onclick="startDraw('circle')"><img src="./assets/iconos/H_circ.png" alt="Circulo" title="Circulo"></button>
+                        <hr>
+                        <button onclick="startEdit()"><img src="./assets/iconos/H_edit.png" alt="Editar" title="Editar"></button>
+                        <button onclick="startDelete()"><img src="./assets/iconos/H_borr.png" alt="Borrar" title="Borrar"></button>
+                        <hr>
+                    </div>
+                </div>
+
+                <div id="print-map-btn-container">
+                    <button id="btn-imprimir" onclick="printMapWithReferences()"> <img src="./assets/iconos/imprimir.png" alt="Imprimir" title="Imprimir"></button>
+                </div>
+            
+               
+                <div id="previewModal" style="display:none;">
+                    <div>
+                        <h3>Previsualización de impresión</h3>
+                        <img id="previewImage"/>
+                        <div class="button-row">
+                            <button onclick="downloadPDF('portrait')">A4 Vertical</button>
+                            <button onclick="downloadPDF('landscape')">A4 Horizontal</button>
+                            <button onclick="downloadPDF('screen')">Pantalla</button>
+                            <button class="button-rowcancelar" onclick="closePreview()">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>    
+
+        <!-- Contenedor para mapa base, no tocar -->
+        <div id="map"></div>
+
+        <!-- Pie de pagina --> 
+        <footer>
+            <div class="piedepagina_pags">
+                    <div class="contenedor_redes">
+                        <a href="https://www.instagram.com/gobiernodelchaco" target="_blank" class="icon"><img class="redes__iconos-svg" src="./assets/iconos/instagram.svg" alt="instagram" title="instagram"/></a>
+                        <a href="https://www.facebook.com/GobiernodelChaco" target="_blank" class="icon"><img class="redes__iconos-svg" src="./assets/iconos/facebook.svg" alt="facebook" title="facebook"/></a>
+                        <a href="https://x.com/GobiernoChaco" class="icon" target="_blank"><img class="redes__iconos-svg" src="./assets/iconos/twitter-x.svg" alt="x-twitter" title="x-twitter"/></a>
+                        <a href="https://canalsomosuno.tv/" class="icon" target="_blank"><img class="redes__iconos-svg" src="./assets/iconos/radio.svg" alt="noticiasChaco" title="noticiasChaco"/></a>
+                    </div>
+                    <div class="contenedor_info">
+                        <div class="info_sit">
+                            <a href="mailto:sit.chaco@chaco.gob.ar"><img src="./assets/iconos/correo.png" alt="Correo SIT Chaco">sit.chaco@chaco.gob.ar</a>
+                            <a href="https://www.google.com/maps?q=Av.+Sarmiento+1768,+Resistencia,+Chaco" target="_blank"><img src="./assets/iconos/ubicacion.png" alt="Direccion SIT Chaco">Av. Sarmiento 1768 - Resistencia, Chaco</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer_copys">
+                    <div class="copy_sit">
+                        &copy; Copyright SIT 2025 - Todos los derechos reservados
+                    </div>
+                </div> 
+            </div>    
+        </footer>
+
+
+
+
+
+        <!-- Acá van los Scripts de leaflet -->
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+        <script src="https://unpkg.com/leaflet-image/leaflet-image.js"></script>
+
+
+        <!-- Acá van los Scripts propios -->
+        <script src="./js/layersMap.js"></script>
+        <script src="./js/toolsmap.js"></script>
+        <script src="./js/imprimir.js"></script>
+        <script src="./js/drawpers.js"></script>
+        <script src="./js/medir.js"></script>
+        <script src="./js/ubicAct.js"></script>
+
+
+    </body>
+</html>
