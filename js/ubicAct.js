@@ -15,7 +15,7 @@ function goToMyLocation() {
 
       // Agregar un marcador (opcional)
       L.marker([lat, lon]).addTo(map)
-        .bindPopup("¡Estás aquí!").openPopup();
+        .bindPopup("¡Estás acá!").openPopup();
     },
     function (error) {
       alert("No se pudo obtener la ubicación: " + error.message);

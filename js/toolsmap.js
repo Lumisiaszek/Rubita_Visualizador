@@ -2,7 +2,7 @@
 var map = L.map('map', {
     zoomControl: false, 
     preferCanvas: true
-    }).setView([-26.35, -60.28], 7.5);
+    }).setView([-27.49, -58.97], 16);
 
     // Mapa base de OpenStreetMap    
     var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -48,67 +48,4 @@ var map = L.map('map', {
         position: 'topright' 
         }).addTo(map);
 
-
-/* VISIBILIDAD DEL PANEL DE CAPAS --------------------------------------------------------------------------------------------------------
-function togglePanel() {
-    var panel = document.getElementById("contenedorpanel");
-    var icon = document.getElementById("toggle-icon");
-
-    // Alternar la clase 'hidden' que oculta el panel
-    panel.classList.toggle("hidden");
-
-    // Cambiar el icono para mostrar/ocultar
-    if (panel.classList.contains("hidden")) {
-        icon.src = "./assets/iconos/flechader.png";  // Icono para mostrar el panel
-        icon.style.width = "40px"; 
-        icon.style.height = "auto"; 
-    } else {
-        icon.src = "./assets/iconos/flechaizq.png";  // Icono para ocultar el panel
-        icon.style.width = "10px"; 
-        icon.style.height = "auto"; 
-    }
-}
-
-
-/* VISIBILIDAD DE CAPAS (OJOS) --------------------------------------------------------------------------------------------------------
-function toggleLayer(layerType, button) {
-    let layer;
-
-    // Asignar la capa según el tipo
-    if (layerType === 'urbano') {
-        layer = parcurb;
-    } else if (layerType === 'rural') {
-        layer = parcrur;
-    } else if (layerType === 'localidades') {
-        layer = local_chaco;
-    } else if (layerType === 'ejidos') {
-        layer = lim_ejidos;
-    } else if (layerType === 'areaurb') {
-        layer = areasurb;
-    } else if (layerType === 'redvial') {
-        layer = red_vial;
-    }
-
-    const icon = button.querySelector("img");
-
-    if (map.hasLayer(layer)) {
-        map.removeLayer(layer);
-        icon.src = './assets/iconos/icon_eyeclose.png';  
-    } else {
-        map.addLayer(layer);
-        icon.src = './assets/iconos/icon_eyeopen.png';   
-    }
-}
-
-function updateEyeIcon(layer, buttonId) {
-    const button = document.getElementById(buttonId);
-    if (!button) return;
-
-    const icon = button.querySelector("img");
-    if (map.hasLayer(layer)) {
-        icon.src = './assets/iconos/icon_eyeopen.png';
-    } else {
-        icon.src = './assets/iconos/icon_eyeclose.png';
-    }
-}*/
 

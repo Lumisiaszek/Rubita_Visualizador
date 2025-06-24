@@ -1,26 +1,22 @@
-// Ocultar el menú de dibujo al iniciar
+
 document.getElementById('drawButtons').style.display = 'none';
 
-// Mostrar/ocultar menú de dibujo
 document.getElementById('toggleDrawMenu').addEventListener('click', function () {
   var drawButtons = document.getElementById('drawButtons');
   drawButtons.style.display = drawButtons.style.display === 'none' ? 'block' : 'none';
 });
 
-// FeatureGroup para almacenar dibujos
 var drawnItems = new L.FeatureGroup();
 map.addLayer(drawnItems);
 
-// Control Draw (sin mostrar herramientas por defecto)
 var drawControl = new L.Control.Draw({
   edit: {
     featureGroup: drawnItems,
-    remove: false // removemos nosotros manualmente
+    remove: false 
   },
   draw: false
 });
 
-// Función para iniciar una herramienta de dibujo individual
 function startDraw(type) {
   let drawer = null;
   switch (type) {
@@ -46,18 +42,21 @@ function startDraw(type) {
   }
 }
 
-// Agregar la geometría al mapa al finalizar el dibujo
 map.on(L.Draw.Event.CREATED, function (e) {
   const layer = e.layer;
   drawnItems.addLayer(layer);
 
-  // Permitir borrar al hacer clic
+if (e.layerType === 'marker') {
+    const { lat, lng } = layer.getLatLng();
+    const textoCoord = `Lat: ${lat.toFixed(6)}, Long: ${lng.toFixed(6)}`;
+    layer.bindPopup(textoCoord).openPopup();
+}  
+
   layer.on('click', function () {
     drawnItems.removeLayer(layer);
   });
 });
 
-// --- Editar geometrías ---
 let editHandler = null;
 
 function startEdit() {
@@ -73,7 +72,6 @@ function startEdit() {
   editHandler.enable();
 }
 
-// --- Borrar todas las geometrías ---
 function startDelete() {
   drawnItems.clearLayers();
 }
