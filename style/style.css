@@ -567,31 +567,432 @@ footer {
 }
 
 
-/* Etiquetas de la capa LOCALIDAD */
 
-.etiqueta {
-    font-size: 8px;
-    font-weight: bold;
-    color: black;      
-    padding: 2px;
-    background: none;
-    border: none;
-    text-shadow: 
-    -1px -1px 0 white, 
-    1px -1px 0 white, 
-    -1px 1px 0 white, 
-    1px 1px 0 white;
-    
+
+/* ESTILOS DE CAPAS - ETIQUETAS Y ESO */
+
+.etiqueta-sectores {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  color: rgb(216, 0, 0);
+  font-weight: bold;
+  font-size: 25px;
 }
 
-.etiqueta::before,
-.etiqueta::after {
-    display: none;
+.item-capa input[type="checkbox"] {
+  display: none;
 }
+
+.item-capa label {
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer;
+  user-select: none;
+  font-family: 'Roboto', sans-serif; 
+  font-size: 0.8rem;
+  color: var(--azul-laguna);
+}
+
+.item-capa label::before {
+  content: '';
+  background-image: url('../assets/iconos/eyeClose.png'); 
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.item-capa input[type="checkbox"]:checked + label::before {
+  background-image: url('../assets/iconos/eyeOpen.png'); 
+}
+
+
+/* REFERENCIAS */
+
+.leyenda-lista {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+  color: var(--azul-laguna)
+}
+
+.simbolo {
+  display: inline-block;
+  margin-right: 8px;
+  border: 1px solid #ffffff;
+  flex-shrink: 0;
+}
+
+.tipo-poligono {
+  width: 25px;
+  height: 14px;
+  border-radius: 2px;
+}
+
+.tipo-linea {
+  width: 25px;
+  height: 4px;
+  border-radius: 0;
+  margin-top: 6px;
+}
+
+.tipo-punto {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 3px;
+}
+
 
 
 /* RESPONSIVE */
 
-@media screen {
-    
+/* Estilos para notebooks */
+@media (min-width: 668px) and (max-width: 1024px) {
+
+    .mobile-buttons,
+    .mobile-panel {
+      display: none !important;
+  }
+ 
+  .contenedor_titulo {
+    width: 40%;
+    padding: 0;
+    padding: 0.3rem 0;
+  }
+
+  .logos img {
+    width: 1.5rem;
+    height: auto;
+  }
+
+  .titulomapa h2 {
+    font-size: 0.8rem;
+  }
+      
+  #contenedorpanel {
+    width: 210px;
+    height: 70vh;
+    border-radius: 0.8rem;
+    margin: 0;
+    padding: 1rem;
+    top: 70px;
+    left: 10px;
+  }
+
+  .searchBar {
+    padding: 0;
+    padding: 0.1rem 0.1rem;
+  }
+
+  .searchBar input {
+    font-size: 0.7rem;
+  }
+
+  .searchBar img {
+    width: 20px;
+    height: auto;
+  }
+
+  .tabsPanel {
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .tabsPanel .tab {
+    font-size: 0.7rem;
+  }
+
+  .leaflet-control-zoom {
+  margin-bottom: 3rem;
+  border-radius: 0.3rem; 
+  overflow: hidden; 
+  }
+
+  .leaflet-control-zoom a {
+    width: 25px !important;
+    height: 25px !important;
+    font-size: 1rem !important; 
+    padding: 0.5rem;
+  }
+
+  .leaflet-control-layers {
+  font-size: 0.6rem;
+  }
+
+  .leaflet-control-layers-toggle {
+  width: 35px !important;
+  height: 35px !important;
+  background-size: 50%;
+  }
+
+  #contenedor_botones {
+    top: 200px; 
+    right: 10px; 
+    width: 30px; 
+    height: auto; 
+    padding: 5px;
+  }
+
+  #ubicActual {
+    gap: 0.3rem;
+    margin-top: 0.2rem;
+  }
+
+  #ubicActual img,
+  #medirMenu img, 
+  #drawMenu img,
+  #toggleDrawMenu img,
+  #medirButtons img,
+  #btn-imprimir img {
+    width: 16px;
+    height: auto;
+  }
+  
+  #toggleDrawMenu img {
+    width: 20px;
+    height: auto
+  }
+
+  #drawButtons img {
+    width: 12px;
+    height: auto;
+  }
+
+  .contenedor_redes {
+      display: flex;
+      align-items: center; 
+      gap: 1rem; 
+  }
+
+  .redes__iconos-svg {
+      width: 14px; 
+      height: 14px; 
+      margin-bottom: 0.5rem;
+      filter: invert(100%); 
+  }
+
+  .redes__iconos-svg:hover {
+      transform: rotate(15deg);
+  }
+
+  .contenedor_info {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+      margin-bottom: 0.2rem;
+  }
+
+  .info_sit {
+    margin-right: 0.5rem;
+  }
+
+  .info_sit a {
+      font-size: 0.6rem;
+      margin-bottom: 0.6rem;
+  }
+
+  .info_sit img {
+      width: 11px;
+  }
+
+  .copy_sit {
+      font-size: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .linea-vertical {
+    width: 1px; 
+    height: 1.1rem; 
+    margin: 0 0.5rem; 
+  }
+
+  .contenedor_titulo {
+    width: 80%;
+    padding: 0;
+    padding: 0.2rem 0;
+  }
+
+  .logos img {
+    width: 1.3rem;
+    height: auto;
+  }
+
+  .titulomapa h2 {
+    font-size: 0.6rem;
+  }
+
+  .contenedorpanel {
+    display: none;
+  }
+
+  .mobile-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    gap: 0.4rem;
+    top: 60px;
+    left: 5px;
+    z-index: 1001;
+    padding: 0.2rem;
+    border-radius: 0.6rem;
+  }
+
+  .mobile-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .mobile-group button {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    background: white;
+    border: none;
+    padding: 0.4rem;
+    border-radius: 30%;
+    cursor: pointer;
+  }
+
+  .mobile-group img {
+    width: 18px;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .mobile-panel {
+    position: absolute; 
+    margin-left: 5px;
+    left: 100%;
+    width: max-content;
+    min-width: 100px;
+    background: white;
+    padding: 0.3rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    display: none;
+    z-index: 1002;
+  }
+
+  .mobile-panel.active {
+    display: block;
+  }
+
+  .leaflet-control-zoom {
+    display: none;
+  }
+
+  .leaflet-control-layers {
+    top: 320px;
+    font-size: 0.6rem !important;
+  }
+
+  .leaflet-control-layers-toggle {
+    width: 30px !important;
+    height: 30px !important;
+    background-size: 60% !important;
+  }
+
+
+  #contenedor_botones {
+    top: 200px; 
+    right: 10px; 
+    width: 30px; 
+    height: auto; 
+    padding: 5px;
+  }
+
+  #ubicActual {
+    gap: 0.3rem;
+    margin-top: 0.2rem;
+  }
+
+  #ubicActual img,
+  #medirMenu img, 
+  #drawMenu img,
+  #toggleDrawMenu img,
+  #medirButtons img,
+  #btn-imprimir img {
+    width: 16px;
+    height: auto;
+  }
+  
+  #toggleDrawMenu img {
+    width: 20px;
+    height: auto
+  }
+
+  #drawButtons img {
+    width: 12px;
+    height: auto;
+  }
+
+  .contenedor_redes {
+      margin: 0;
+      margin-left: 1rem;
+      display: flex;
+      align-items: center; 
+      gap: 0.5rem; 
+  }
+
+  .redes__iconos-svg {
+      width: 12px; 
+      height: 12px; 
+      margin-bottom: 0.5rem;
+      filter: invert(100%); 
+  }
+
+  .redes__iconos-svg:hover {
+      transform: rotate(15deg);
+  }
+
+  .contenedor_info {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+      margin-bottom: 0.2rem;
+      margin-right: 1rem;
+  }
+
+  .info_sit {
+    margin: 0;
+  }
+
+  .info_sit a {
+    font-size: 0.5rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .info_sit img {
+      width: 10px;
+      height: auto;
+  }
+
+  .copy_sit {
+      font-size: 0.3rem;
+      margin: 0;
+  }
+
 }
