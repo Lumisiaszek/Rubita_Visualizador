@@ -57,3 +57,15 @@ function toggleHerramientaMedir() {
   const menu = document.getElementById("medirButtons");
   menu.style.display = menu.style.display === "none" ? "block" : "none";
 }
+
+map.on('click', function () {
+  if (map._activeDrawer) {
+    map._activeDrawer.disable();
+    map._activeDrawer = null;
+  }
+
+  if (editHandler) {
+    editHandler.disable();
+    editHandler = null;
+  }
+});

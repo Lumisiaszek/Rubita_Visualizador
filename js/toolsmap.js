@@ -34,13 +34,21 @@ var map = L.map('map', {
         attribution: 'Tiles &copy; Esri'
     });
 
+    var Rubita2024 = L.tileLayer('https://sit.chaco.gob.ar/public/tiles/Piramide_La_Rubita_2024/{z}/{x}/{y}.png', {
+        maxZoom: 20,
+        attribution: ''
+    });
+
+    
+
     // PANEL DE MAPAS BASES 
     var baseMaps = {
         "OpenStreetMap": osm,
         "Satelital": esriSatellite,
         "CartoDB Gris": cartoDB_Positron,
         "ESRI Dark": ArcGis_Dark,
-        "ESRI Topo": esriTopo
+        "ESRI Topo": esriTopo,
+        "Rubita 2024": Rubita2024
     };
     L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
 

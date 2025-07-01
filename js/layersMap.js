@@ -11,6 +11,7 @@ function ObtenerLinkJsonGeoserverFiltro (espacio, capa, campo, valor){
     return UrlGeoserver+espacio+"/ows?service=wfs&version=1.0.0&request=GetFeature&typeName="+espacio+":"+capa+"&srsNAME=urn:ogc:def:crs:OGC:1.3:CRS84&outputFormat=json"+filtro;
 }
 
+
 const capasGeoJSON = {};
 
 // SECTORES - RUBITA
@@ -21,7 +22,7 @@ function cargarCapasSectores() {
         .then(data => {
             capasGeoJSON["sector_rub"] = L.geoJson(data, {
                 style: {
-                    color: 'red',
+                    color: '#e6301d',
                     weight: 2.5,
                     fillOpacity: 0
                 },
@@ -188,9 +189,9 @@ function cargarCapaEquipam() {
         .then(data => {
             capasGeoJSON["equipam_rub"] = L.geoJson(data, {
                 style: {
-                    color: 'blue',
+                    color: '#6c93d7',
                     weight: 2,
-                    fillOpacity: 0.8
+                    fillOpacity: 0.7
                 },
                 onEachFeature: function (feature, layer) {
                     if (feature.properties) {
@@ -232,28 +233,39 @@ document.querySelectorAll('.tab').forEach(tab => {
 // PANEL DE CAPAS - Registros BD 
 
 function mostrarPanelCapas() {
-  fetch("http://192.168.43.78/getcapas/P", {
-  })
-  
+  fetch("http://192.168.43.78/getcapas/P")
     .then(response => response.json())
     .then(registros => {
-     
-      document.querySelector("#capasCheckboxContainer").innerHTML= "";
-    
-      let cadena = "";
-      
-        registros.forEach(capa => {
-            cadena += `
-            <div class='item-capa'>
-                <input type='checkbox' id='${capa.NoGeoserver}' value='${capa.NoGeoserver}' onchange='activarCapa("${capa.NoGeoserver}")'>
-                <label for='${capa.NoGeoserver}'>${capa.NoShape}</label>
-            </div>
-            `;
+      let cadenaEscritorio = "";
+      let cadenaMobile = "";
+
+      registros.forEach(capa => {
+        
+        cadenaEscritorio += `
+          <div class='item-capa'>
+              <input type='checkbox' id='${capa.NoGeoserver}' value='${capa.NoGeoserver}' onchange='activarCapa("${capa.NoGeoserver}")'>
+              <label for='${capa.NoGeoserver}'>${capa.NoShape}</label><br>
+              <input type='range' min='0' max='1' step='0.1' value='1' class='slider-opacidad' 
+                onchange='cambiarOpacidad("${capa.NoGeoserver}", this.value)'>
+          </div>
+        `;
+
+        cadenaMobile += `
+          <div class='item-capa'>
+              <input type='checkbox' id='${capa.NoGeoserver}_m' value='${capa.NoGeoserver}' onchange='activarCapa("${capa.NoGeoserver}")'>
+              <label for='${capa.NoGeoserver}_m'>${capa.NoShape}</label>
+          </div>
+        `;
       });
 
-      document.querySelector("#capasCheckboxContainer").innerHTML = cadena;
-    })
+      // Cargar capas en panel de escritorio
+      const contenedorEscritorio = document.querySelector("#capasCheckboxContainer");
+      if (contenedorEscritorio) contenedorEscritorio.innerHTML = cadenaEscritorio;
 
+      // Cargar capas en panel móvil
+      const contenedorMobile = document.querySelector("#capasCheckboxContainerMobile");
+      if (contenedorMobile) contenedorMobile.innerHTML = cadenaMobile;
+    })
     .catch(error => console.error("Error al cargar panel de capas:", error));
 }
 
@@ -262,9 +274,7 @@ mostrarPanelCapas();
 function activarCapa(nombreCapa) {
   const checkbox = document.getElementById(nombreCapa);
 
-  // Si no existe aún en memoria, cargarla
   if (!capasGeoJSON[nombreCapa]) {
-    // Llamar a la función correspondiente
     switch (nombreCapa) {
       case "espVer_rub":
         cargarCapaEspVerde();
@@ -351,7 +361,17 @@ function obtenerTipoForzado(nombreCapa) {
   return tipos[nombreCapa] || "poligono";
 }
 
-
 function formatearNombreCapa(nombre) {
   return nombre.replace("_rub", "").replace(/_/g, " ");
+}
+
+// CONTROL DE OPACIDAD CAPA EN PANEL DE CAPAS
+function cambiarOpacidad(nombreCapa, valorOpacidad) {
+  const capa = capasGeoJSON[nombreCapa];
+  if (capa) {
+    capa.setStyle({
+      fillOpacity: parseFloat(valorOpacidad),
+      opacity: parseFloat(valorOpacidad)
+    });
+  }
 }
