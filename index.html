@@ -36,21 +36,18 @@
                     <button id="btnLimpiar" onclick="limpiarFiltro()" style="display: none;"><img src="./assets/iconos/searchclean.png" alt=""></button>
                 </div> 
             </div>
-            <div class="tabsPanel">
-                <button class="tab active" data-tab="capas">Panel de capas</button>
-                <button class="tab" data-tab="referencias">Referencias</button>
-            </div> 
-            <div id="tab-capas" class="tab-content active">
-                <div id="capasCheckboxContainer">
-                    <div class="capasCheckbox">
-                        <input type="checkbox" id="capasCheckbox">
-                    </div> 
+            <div class="scroll-wrapper">
+                <div class="tabsPanel">
+                    <button class="tab active" data-tab="capas">Panel de capas</button>
+                    <button class="tab" data-tab="referencias">Referencias</button>
+                </div> 
+                <div id="tab-capas" class="tab-content active">
+                    <div id="capasCheckboxContainer"></div>
                 </div>
-            </div>
 
-            <div id="tab-referencias" class="tab-content">
-                <p>y por acá mis referencias (otro miterio) </p>
-            </div> 
+                <div id="tab-referencias" class="tab-content">
+                </div> 
+            </div>
         </div>
 
         <div id="contenedor_botones">
@@ -120,7 +117,7 @@
             <div class="mobile-group">
                 <button onclick="togglePanel('busqueda')"><img src="./assets/iconos/searchMobile.png" alt=""></button>
                 <div id="panel-busqueda" class="mobile-panel">
-                <input type="text" placeholder="Buscar por parcela" />
+                <input id="inputCategoriaMobile" type="text" placeholder="Buscar por parcela" />
                 </div>
             </div>
             <div class="mobile-group">
@@ -133,8 +130,7 @@
             </div>
             <div class="mobile-group">
                 <button onclick="togglePanel('referencias')"><img src="assets/iconos/refMobile.png" alt=""></button>
-                <div id="panel-referencias" class="mobile-panel">
-                <p>Referencias</p>
+                <div id="panel-referencias" class="mobile-panel"></div>
             </div>
         </div>
 

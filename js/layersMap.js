@@ -78,6 +78,7 @@ function cargarCapaEspVerde() {
 }
 
 // CAPA PARCELARIO - RUBITA 
+
 function cargarCapaParcelario() {
     const url = ObtenerLinkJsonGeoserver("AMGR", "parcelario_rub");
     fetch(url)
@@ -95,12 +96,63 @@ function cargarCapaParcelario() {
                             .map(([k, v]) => `<b>${k}:</b> ${v}`).join("<br>");
                         layer.bindPopup(contenidoPopup);
                     }
+
+                    layer.options.originalStyle = {
+                        color: '#9E9E9E',
+                        weight: 0.7,
+                        fillOpacity: 0.3,
+                        opacity: 1
+                    }
                 }
             }).addTo(map);
+
         })
         .catch(error => {
             console.error("Error al cargar capa completa:", error);
         });
+}
+
+// Filtro por parcela
+
+function filtrarPorCategoria() {
+    const valor = document.getElementById("inputCategoria").value.trim().toLowerCase();
+    const botonLimpiar = document.getElementById("btnLimpiar");
+
+    botonLimpiar.style.display = valor ? "inline-block" : "none";
+
+    const capa = capasGeoJSON["parcelario_rub"];
+    if (!capa) return; 
+
+    capa.eachLayer(layer => {
+        const props = layer.feature?.properties;
+        const texto = props?.nu_par?.toString().toLowerCase(); 
+
+      if (!valor) {
+              if (layer.options.originalStyle) {
+                      layer.setStyle(layer.options.originalStyle);
+              }
+              } else if (texto && texto.includes(valor)) {
+                  layer.setStyle({
+                      color: "#f26df9",
+                      weight: 1,
+                      fillOpacity: 0.6,
+                      opacity: 1
+                  });
+              } else {
+                  layer.setStyle({
+                      color: "#9E9E9E",
+                      weight: 0.7,
+                      fillOpacity: 0,
+                      opacity: 0
+                  });
+              }
+          });
+}
+
+function limpiarFiltro() {
+    document.getElementById("inputCategoria").value = "";
+    document.getElementById("btnLimpiar").style.display = "none";
+    filtrarPorCategoria();
 }
 
 // MANZANAS - RUBITA 
@@ -236,17 +288,23 @@ function mostrarPanelCapas() {
   fetch("http://192.168.43.78/getcapas/P")
     .then(response => response.json())
     .then(registros => {
+
+
       let cadenaEscritorio = "";
       let cadenaMobile = "";
 
       registros.forEach(capa => {
-        
+
         cadenaEscritorio += `
           <div class='item-capa'>
               <input type='checkbox' id='${capa.NoGeoserver}' value='${capa.NoGeoserver}' onchange='activarCapa("${capa.NoGeoserver}")'>
               <label for='${capa.NoGeoserver}'>${capa.NoShape}</label><br>
-              <input type='range' min='0' max='1' step='0.1' value='1' class='slider-opacidad' 
-                onchange='cambiarOpacidad("${capa.NoGeoserver}", this.value)'>
+
+              <div>
+                <p class='TextOp'>Opacidad</p>
+                <input type='range' min='0' max='1' step='0.1' value='1' class='slider-opacidad' 
+                  onchange='cambiarOpacidad("${capa.NoGeoserver}", this.value)'>
+              </div>  
           </div>
         `;
 
@@ -258,21 +316,21 @@ function mostrarPanelCapas() {
         `;
       });
 
-      // Cargar capas en panel de escritorio
+      // Panel de escritorio
       const contenedorEscritorio = document.querySelector("#capasCheckboxContainer");
       if (contenedorEscritorio) contenedorEscritorio.innerHTML = cadenaEscritorio;
-
-      // Cargar capas en panel móvil
+      // Panel movil
       const contenedorMobile = document.querySelector("#capasCheckboxContainerMobile");
       if (contenedorMobile) contenedorMobile.innerHTML = cadenaMobile;
-    })
+      })
+      
     .catch(error => console.error("Error al cargar panel de capas:", error));
 }
 
 mostrarPanelCapas();
 
 function activarCapa(nombreCapa) {
-  const checkbox = document.getElementById(nombreCapa);
+  const checkbox = document.getElementById(nombreCapa) || document.getElementById(nombreCapa + "_m") ;
 
   if (!capasGeoJSON[nombreCapa]) {
     switch (nombreCapa) {
@@ -298,14 +356,17 @@ function activarCapa(nombreCapa) {
         cargarCapaEjesCalle();
         break;
     }
+    setTimeout(mostrarReferencias, 500);
     return;
   }
 
-  if (checkbox.checked) {
+  if (checkbox && checkbox.checked) {
     capasGeoJSON[nombreCapa].addTo(map);
   } else {
     map.removeLayer(capasGeoJSON[nombreCapa]);
   }
+
+   mostrarReferencias(); 
 }
 
 
@@ -332,7 +393,13 @@ function mostrarReferencias() {
   }
 
   html += '</ul>';
-  document.getElementById("tab-referencias").innerHTML = html;
+    // Escritorio
+    const panelEscritorio = document.getElementById("tab-referencias");
+    if (panelEscritorio) panelEscritorio.innerHTML = html;
+
+    // Móvil
+    const panelMobile = document.getElementById("panel-referencias");
+    if (panelMobile) panelMobile.innerHTML = html;
 }
 
 function obtenerColorCapa(nombre) {
@@ -375,3 +442,32 @@ function cambiarOpacidad(nombreCapa, valorOpacidad) {
     });
   }
 }
+
+// CONTROL DE FILTROS
+
+document.addEventListener('DOMContentLoaded', () => {
+  const inputPrincipal = document.getElementById('inputCategoria');
+  const inputMobile = document.getElementById('inputCategoriaMobile');
+  const botonLimpiar = document.getElementById('btnLimpiar');
+
+  if (inputPrincipal && inputMobile) {
+    inputPrincipal.addEventListener('input', (e) => {
+      inputMobile.value = e.target.value;
+      filtrarPorCategoria();
+    });
+
+    inputMobile.addEventListener('input', (e) => {
+      inputPrincipal.value = e.target.value;
+      filtrarPorCategoria();
+    });
+  }
+
+  if (botonLimpiar) {
+    botonLimpiar.addEventListener('click', () => {
+      if (inputPrincipal) inputPrincipal.value = '';
+      if (inputMobile) inputMobile.value = '';
+      botonLimpiar.style.display = 'none';
+      filtrarPorCategoria();
+    });
+  }
+});
