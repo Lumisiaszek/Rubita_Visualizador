@@ -50,6 +50,8 @@
             </div>
         </div>
 
+        <div class="toggle-tab" id="togglePanel" onclick="togglePanel()">❮</div> 
+
         <div id="contenedor_botones">
             <div id="ubicActual">
                 <button onclick="goToMyLocation()">
@@ -92,6 +94,7 @@
                 </div>
             </div>
 
+
             <div id="print-map-btn-container">
                 <button id="btn-imprimir" onclick="printMapWithReferences()"> <img src="./assets/iconos/imprimir.png" alt="Imprimir" title="Imprimir"></button>
             </div>           
@@ -107,6 +110,13 @@
                     </div>
                 </div>
             </div>
+
+            <div id="downloadMenu">
+                <hr>
+                <a class="btn-download" href="https://drive.google.com/drive/folders/1bYr9kOJxLl1VP-9BiOhl-VuZbThmiTqn?usp=sharing" target="_blank" rel="noopener noreferrer">
+                <img src="./assets/iconos/capasDesc.png" alt="Descargar capas" title="Descargar capas"></a>
+            </div>
+
         </div>    
 
         <!-- Contenedor para mapa base, no tocar -->
@@ -115,13 +125,13 @@
 
         <div class="mobile-buttons">
             <div class="mobile-group">
-                <button onclick="togglePanel('busqueda')"><img src="./assets/iconos/searchMobile.png" alt=""></button>
+                <button onclick="toggleMobilePanel('busqueda')"><img src="./assets/iconos/searchMobile.png" alt=""></button>
                 <div id="panel-busqueda" class="mobile-panel">
                 <input id="inputCategoriaMobile" type="text" placeholder="Buscar por parcela" />
                 </div>
             </div>
             <div class="mobile-group">
-                <button onclick="togglePanel('capas')">
+                <button onclick="toggleMobilePanel('capas')">
                     <img src="./assets/iconos/capasMobile.png" alt="">
                 </button>
                 <div id="panel-capas" class="mobile-panel">
@@ -129,7 +139,7 @@
                 </div>
             </div>
             <div class="mobile-group">
-                <button onclick="togglePanel('referencias')"><img src="assets/iconos/refMobile.png" alt=""></button>
+                <button onclick="toggleMobilePanel('referencias')"><img src="./assets/iconos/refMobile.png" alt=""></button>
                 <div id="panel-referencias" class="mobile-panel"></div>
             </div>
         </div>

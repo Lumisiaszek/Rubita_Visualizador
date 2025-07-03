@@ -11,6 +11,20 @@ function ObtenerLinkJsonGeoserverFiltro (espacio, capa, campo, valor){
     return UrlGeoserver+espacio+"/ows?service=wfs&version=1.0.0&request=GetFeature&typeName="+espacio+":"+capa+"&srsNAME=urn:ogc:def:crs:OGC:1.3:CRS84&outputFormat=json"+filtro;
 }
 
+//OCULTAR O MOSTRAR PANEL
+
+function togglePanel() {
+  const panel = document.getElementById("contenedorpanel");
+  const toggle = document.getElementById("togglePanel");
+
+  panel.classList.toggle("oculto");
+
+  if (panel.classList.contains("oculto")) {
+    toggle.innerHTML = "❯"; 
+  } else {
+    toggle.innerHTML = "❮"; 
+  }
+}
 
 const capasGeoJSON = {};
 
@@ -487,3 +501,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+//PANEL DE MOVIL
+function toggleMobilePanel(nombre) {
+  const paneles = document.querySelectorAll(".mobile-panel");
+
+  paneles.forEach(p => {
+    if (p.id === "panel-" + nombre) {
+      p.classList.toggle("active");
+    } else {
+      p.classList.remove("active");
+    }
+  });
+}

@@ -105,6 +105,34 @@ h1, h2, h3, h4, span {
     transition: all 0.3s ease; 
 }
 
+.contenedorpanel.oculto {
+  transform: translateX(-100%);
+}
+
+
+.toggle-tab {
+  position: absolute;
+  top: 95px; 
+  left: 315px; /* 300 + 15px del panel */
+  width: 18px;
+  height: 50px;
+  background: var(--azul-laguna);
+  color: white;
+  font-size: 15px;
+  text-align: center;
+  line-height: 50px;
+  cursor: pointer;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+  z-index: 1001;
+  user-select: none;
+  transition: left 0.3s;
+}
+
+.contenedorpanel.oculto + .toggle-tab {
+  left: 15px;
+}
+
 #capasCheckboxContainerMobile {
   display: none;
 }
@@ -340,7 +368,8 @@ h1, h2, h3, h4, span {
     background-color: #e0e0e0;
 }
 
-#medirMenu {
+#medirMenu,
+#downloadMenu {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -404,7 +433,8 @@ h1, h2, h3, h4, span {
 #drawMenu hr,
 #medir-btn-container hr,
 #medirMenu hr,
-#ubicActual hr {
+#ubicActual hr,
+#downloadMenu hr {
     margin: 1px 0;
     width: 1.5rem;
 }
@@ -412,6 +442,12 @@ h1, h2, h3, h4, span {
 #toggleDrawMenu img {
     width: 30px;
     height: auto;
+}
+
+#downloadMenu img {
+  width: 25px;
+  height: auto;
+  margin-top: 0.3rem;
 }
 
 #medirMenu img,
@@ -933,6 +969,11 @@ footer {
   display: block;
   }
 
+  
+  .toggle-tab {
+    display: none;
+  }
+
   .mobile-buttons {
     display: flex;
     flex-direction: column;
@@ -1075,7 +1116,8 @@ footer {
     height: auto;
   }
   
-  #toggleDrawMenu img {
+  #toggleDrawMenu img,
+  #downloadMenu img {
     width: 20px;
     height: auto
   }
@@ -1130,5 +1172,6 @@ footer {
       font-size: 0.3rem;
       margin: 0;
   }
+
 
 }
