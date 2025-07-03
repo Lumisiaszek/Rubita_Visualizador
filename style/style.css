@@ -743,11 +743,10 @@ footer {
 /* Estilos para notebooks */
 @media (min-width: 668px) and (max-width: 1024px) {
 
-    .mobile-buttons,
-    .mobile-panel {
-      display: none !important;
+  .mobile-buttons,
+  .mobile-panel {
+    display: none !important;
   }
-
 
   .contenedor_titulo {
     width: 40%;
@@ -838,7 +837,23 @@ footer {
   .slider-opacidad::-webkit-slider-thumb {
   width: 11px;
   height: 11px;
-}
+  }
+
+  .toggle-tab {
+  position: absolute;
+  top: 95px; 
+  left: 240px; 
+  width: 18px;
+  height: 50px;
+  background: var(--azul-laguna);
+  color: white;
+  font-size: 12px;
+  line-height: 50px;
+  }
+
+  .contenedorpanel.oculto + .toggle-tab {
+  left: 10px;
+  }
 
   .leaflet-control-zoom {
   margin-bottom: 3rem;

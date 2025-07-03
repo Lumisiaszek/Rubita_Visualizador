@@ -6,19 +6,19 @@ var map = L.map('map', {
 
     // Mapa base de OpenStreetMap    
     var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
+        maxZoom: 22,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
 
     // Mapa base CartoDB Gris
     var cartoDB_Positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; OpenStreetMap &copy; CARTO',
-        maxZoom: 19
+        maxZoom: 22,
     });
 
     // Mapa  Satelite
     var esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 19,
+        maxZoom: 22,
         attribution: 'Tiles &copy; Esri'
     }).addTo(map);
 
@@ -26,21 +26,21 @@ var map = L.map('map', {
     // Mapa NegroArcGis
     var ArcGis_Dark = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; Esri',
-        maxZoom: 19
+        maxZoom: 22,
     });
 
     var esriTopo = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 20,
+        maxZoom: 22,
         attribution: 'Tiles &copy; Esri'
     });
 
     var Rubita2024 = L.tileLayer('https://sit.chaco.gob.ar/public/tiles/Piramide_La_Rubita_2024/{z}/{x}/{y}.png', {
-        maxZoom: 20,
+        maxZoom: 22,
         attribution: ''
     });
 
     var Rubita2025 = L.tileLayer('https://sit.chaco.gob.ar/public/tiles/Piramide_La_Rubita_2025/{z}/{x}/{y}.png', {
-        maxZoom: 20,
+        maxZoom: 22,
         attribution: ''
     });
     
@@ -52,10 +52,15 @@ var map = L.map('map', {
         "CartoDB Gris": cartoDB_Positron,
         "ESRI Dark": ArcGis_Dark,
         "ESRI Topo": esriTopo,
+    };
+
+        var overlayMaps = {
         "Rubita 2024": Rubita2024,
         "Rubita 2025": Rubita2025
     };
-    L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
+
+    L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+
 
     L.control.zoom({
         position: 'topright' 
