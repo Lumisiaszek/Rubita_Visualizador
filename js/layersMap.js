@@ -302,12 +302,10 @@ function mostrarPanelCapas() {
       let cadenaMobile = "";
 
       registros.forEach(capa => {
-      let chequeo="" 
 
-        if (capa.AcShape){  chequeo="checked" }
         cadenaEscritorio += `
           <div class='item-capa'>
-              <input type='checkbox' id='${capa.NoGeoserver}' ${chequeo} onchange='activarCapa("${capa.NoGeoserver}")'>
+              <input type='checkbox' id='${capa.NoGeoserver}' ${capa.AcShape ? 'checked' : ''} onchange='activarCapa("${capa.NoGeoserver}")'>
               <label class='est${capa.NoGeoserver}' for='${capa.NoGeoserver}'>${capa.NoShape}</label><br>
 
               <div>
@@ -320,14 +318,13 @@ function mostrarPanelCapas() {
 
         cadenaMobile += `
           <div class='item-capa'>
-              <input type='checkbox' id='${capa.NoGeoserver}_m' value='${capa.NoGeoserver}' onchange='activarCapa("${capa.NoGeoserver}")'>
+              <input type='checkbox' id='${capa.NoGeoserver}_m' onchange='activarCapa("${capa.NoGeoserver}")'>
               <label for='${capa.NoGeoserver}_m'>${capa.NoShape}</label>
           </div>
         `;
       if (capa.AcShape){
         activarCapa(capa.NoGeoserver)
-
-      
+        activarCapa(capa.NoGeoserver+'_m')
       }
       });
 
