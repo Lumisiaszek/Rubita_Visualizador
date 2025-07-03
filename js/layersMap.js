@@ -38,7 +38,7 @@ function cargarCapasSectores() {
                 style: {
                     color: '#e6301d',
                     weight: 2.5,
-                    fillOpacity: 0
+                    fillOpacity: document.querySelector(".valuesector_rub").value
                 },
                 onEachFeature: function (feature, layer) {
           // Etiqueta con nu_sector
@@ -53,14 +53,9 @@ function cargarCapasSectores() {
             );
           }
         }
-      });
-
-      const checkbox = document.getElementById("sector_rub");
-        if (checkbox && checkbox.checked) {
-            capasGeoJSON["sector_rub"].addTo(map);
-        }
-       })
-        .catch(error => console.error("Error al cargar capa GeoServer:", error)); 
+      }).addTo(map);
+    })
+    .catch(error => console.error("Error al cargar capa GeoServer:", error)); 
 }
 
 
@@ -74,7 +69,7 @@ function cargarCapaEspVerde() {
                 style: {
                     color: '#9FCF7D',
                     weight: 0.5,
-                    fillOpacity: 0.5
+                    fillOpacity: document.querySelector(".valueespVer_rub").value
                 },
                 onEachFeature: function (feature, layer) {
                   //PopUp
@@ -114,8 +109,7 @@ function cargarCapaParcelario() {
                     layer.options.originalStyle = {
                         color: '#9E9E9E',
                         weight: 0.7,
-                        fillOpacity: 0.3,
-                        opacity: 1
+                        fillOpacity: document.querySelector(".valueparcelario_rub").value
                     }
                 }
             }).addTo(map);
@@ -179,7 +173,7 @@ function cargarCapaMz() {
                 style: {
                     color: '#2a2a2a',
                     weight: 1,
-                    fillOpacity: 0
+                    fillOpacity: document.querySelector(".valuemz_rub").value
                 },
                 onEachFeature: function (feature, layer) {
                     if (feature.properties) {
@@ -205,7 +199,7 @@ function cargarCapaCavas() {
                 style: {
                     color: '#ACC4DB',
                     weight: 0.5,
-                    fillOpacity: 0.5
+                    fillOpacity: document.querySelector(".valuecavas_rub").value
                 },
                 onEachFeature: function (feature, layer) {
                     if (feature.properties) {
@@ -231,7 +225,7 @@ function cargarCapaEjesCalle() {
                 style: {
                     color: '#c76c25',
                     weight: 2.5,
-                    fillOpacity: 0
+                    fillOpacity: document.querySelector(".valueejeCalles_rub").value
                 },
                 onEachFeature: function (feature, layer) {
                     if (feature.properties) {
@@ -257,7 +251,7 @@ function cargarCapaEquipam() {
                 style: {
                     color: '#6c93d7',
                     weight: 2,
-                    fillOpacity: 0.7
+                    fillOpacity: document.querySelector(".valueequipam_rub").value
                 },
                 onEachFeature: function (feature, layer) {
                     if (feature.properties) {
@@ -308,15 +302,17 @@ function mostrarPanelCapas() {
       let cadenaMobile = "";
 
       registros.forEach(capa => {
+      let chequeo="" 
 
+        if (capa.AcShape){  chequeo="checked" }
         cadenaEscritorio += `
           <div class='item-capa'>
-              <input type='checkbox' id='${capa.NoGeoserver}' value='${capa.NoGeoserver}' onchange='activarCapa("${capa.NoGeoserver}")'>
-              <label for='${capa.NoGeoserver}'>${capa.NoShape}</label><br>
+              <input type='checkbox' id='${capa.NoGeoserver}' ${chequeo} onchange='activarCapa("${capa.NoGeoserver}")'>
+              <label class='est${capa.NoGeoserver}' for='${capa.NoGeoserver}'>${capa.NoShape}</label><br>
 
               <div>
                 <p class='TextOp'>Opacidad</p>
-                <input type='range' min='0' max='1' step='0.1' value='1' class='slider-opacidad' 
+                <input type='range' min='0' max='1' step='0.1' value='${capa.OpShape/100}' class='slider-opacidad value${capa.NoGeoserver}' 
                   onchange='cambiarOpacidad("${capa.NoGeoserver}", this.value)'>
               </div>  
           </div>
@@ -328,7 +324,14 @@ function mostrarPanelCapas() {
               <label for='${capa.NoGeoserver}_m'>${capa.NoShape}</label>
           </div>
         `;
+      if (capa.AcShape){
+        activarCapa(capa.NoGeoserver)
+
+      
+      }
       });
+
+
 
       // Panel de escritorio
       const contenedorEscritorio = document.querySelector("#capasCheckboxContainer");
