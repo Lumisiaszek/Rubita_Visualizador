@@ -365,7 +365,6 @@ function activarCapa(nombreCapa) {
         break;
     }
 
-    // Esperamos a que se cargue y luego sincronizamos el estado
     setTimeout(() => {
       if (capasGeoJSON[nombreCapa]) {
         if (isChecked) {
@@ -377,16 +376,11 @@ function activarCapa(nombreCapa) {
     return;
   }
 
-  // Mostrar u ocultar la capa según estado
   if (isChecked) {
     capasGeoJSON[nombreCapa].addTo(map);
   } else {
     map.removeLayer(capasGeoJSON[nombreCapa]);
   }
-
-  // Sincronizar checkboxes
-  if (checkboxDesktop) checkboxDesktop.checked = isChecked;
-  if (checkboxMobile) checkboxMobile.checked = isChecked;
 
   mostrarReferencias();
 }
