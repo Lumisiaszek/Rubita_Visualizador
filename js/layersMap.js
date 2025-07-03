@@ -285,7 +285,7 @@ document.querySelectorAll('.tab').forEach(tab => {
 // PANEL DE CAPAS - Registros BD 
 
 function mostrarPanelCapas() {
-  fetch("http://192.168.43.78/getcapas/P")
+  fetch("https://sit.chaco.gob.ar/getcapas/P")
     .then(response => response.json())
     .then(registros => {
 
@@ -330,8 +330,16 @@ function mostrarPanelCapas() {
 mostrarPanelCapas();
 
 function activarCapa(nombreCapa) {
-  const checkbox = document.getElementById(nombreCapa) || document.getElementById(nombreCapa + "_m") ;
+  const checkboxDesktop = document.getElementById(nombreCapa);
+  const checkboxMobile = document.getElementById(nombreCapa + "_m");
 
+  // Evaluamos si alguno está activado
+  const isChecked = (
+    (checkboxDesktop && checkboxDesktop.checked) ||
+    (checkboxMobile && checkboxMobile.checked)
+  );
+
+  // Si no existe aún la capa, cargarla
   if (!capasGeoJSON[nombreCapa]) {
     switch (nombreCapa) {
       case "espVer_rub":
@@ -356,17 +364,31 @@ function activarCapa(nombreCapa) {
         cargarCapaEjesCalle();
         break;
     }
-    setTimeout(mostrarReferencias, 500);
+
+    // Esperamos a que se cargue y luego sincronizamos el estado
+    setTimeout(() => {
+      if (capasGeoJSON[nombreCapa]) {
+        if (isChecked) {
+          capasGeoJSON[nombreCapa].addTo(map);
+        }
+        mostrarReferencias();
+      }
+    }, 500);
     return;
   }
 
-  if (checkbox && checkbox.checked) {
+  // Mostrar u ocultar la capa según estado
+  if (isChecked) {
     capasGeoJSON[nombreCapa].addTo(map);
   } else {
     map.removeLayer(capasGeoJSON[nombreCapa]);
   }
 
-   mostrarReferencias(); 
+  // Sincronizar checkboxes
+  if (checkboxDesktop) checkboxDesktop.checked = isChecked;
+  if (checkboxMobile) checkboxMobile.checked = isChecked;
+
+  mostrarReferencias();
 }
 
 
