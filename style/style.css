@@ -172,6 +172,10 @@ h1, h2, h3, h4, span {
   justify-content: center;
 }
 
+#btnLimpiar img {
+  display: flex;
+}
+
 .tabsPanel {
   display: flex;
   justify-content: space-around;
@@ -257,6 +261,26 @@ h1, h2, h3, h4, span {
   background: #003366;
   cursor: pointer;
   border: 2px solid white;
+}
+.OpBarr {
+  display: flex;
+  align-items: center;
+}
+
+.porcentaje-opacidad {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--azul-laguna);
+  border-radius: 5px;
+  width: 30px;
+  height: 18px;
+  font-size: 0.5rem;
+  text-align: center;
+  margin-left: 8px;
+  font-weight: bold;
+  color: var(--azul-laguna)
 }
 
 
@@ -1055,6 +1079,19 @@ footer {
     display: block;
   }
 
+  .mobile-panel #inputCategoriaMobile {
+    all: unset;
+    width: 100%;
+    padding: 5px 6px;
+    font-size: 0.6rem;
+    background-color: white;
+    box-sizing: border-box;
+  }
+
+  #inputCategoriaMobile:focus {
+    outline: none;
+  }
+
   .leyenda-lista {
     list-style: none;
     margin: 0;
@@ -1097,7 +1134,7 @@ footer {
   }
 
   .leaflet-control-layers {
-    top: 320px;
+    top: 355px;
     font-size: 0.6rem !important;
   }
 

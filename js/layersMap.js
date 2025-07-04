@@ -37,6 +37,7 @@ function cargarCapasSectores() {
             capasGeoJSON["sector_rub"] = L.geoJson(data, {
                 style: {
                     color: '#e6301d',
+                    opacity: 1,
                     weight: 2.5,
                     fillOpacity: document.querySelector(".valuesector_rub").value
                 },
@@ -95,9 +96,11 @@ function cargarCapaParcelario() {
         .then(data => {
             capasGeoJSON["parcelario_rub"] = L.geoJson(data, {
                 style: {
-                    color: '#9E9E9E',
-                    weight: 0.7,
-                    fillOpacity: 0.3
+                    color: 'white',
+                    opacity: '1',
+                    weight: 0.8,
+                    fillColor: '#9E9E9E',
+                    fillOpacity: document.querySelector(".valueparcelario_rub").value
                 },
                 onEachFeature: function (feature, layer) {
                     if (feature.properties) {
@@ -107,9 +110,10 @@ function cargarCapaParcelario() {
                     }
 
                     layer.options.originalStyle = {
-                        color: '#9E9E9E',
-                        weight: 0.7,
-                        fillOpacity: document.querySelector(".valueparcelario_rub").value
+                    color: 'white',
+                    weight: 0.8,
+                    fillColor: '#9E9E9E',
+                    fillOpacity: document.querySelector(".valueparcelario_rub").value
                     }
                 }
             }).addTo(map);
@@ -129,32 +133,36 @@ function filtrarPorCategoria() {
     botonLimpiar.style.display = valor ? "inline-block" : "none";
 
     const capa = capasGeoJSON["parcelario_rub"];
-    if (!capa) return; 
+    if (!capa) return;
 
     capa.eachLayer(layer => {
         const props = layer.feature?.properties;
-        const texto = props?.nu_par?.toString().toLowerCase(); 
+        const texto = props?.nu_par?.toString().toLowerCase();
 
-      if (!valor) {
-              if (layer.options.originalStyle) {
-                      layer.setStyle(layer.options.originalStyle);
-              }
-              } else if (texto && texto.includes(valor)) {
-                  layer.setStyle({
-                      color: "#f26df9",
-                      weight: 1,
-                      fillOpacity: 0.6,
-                      opacity: 1
-                  });
-              } else {
-                  layer.setStyle({
-                      color: "#9E9E9E",
-                      weight: 0.7,
-                      fillOpacity: 0,
-                      opacity: 0
-                  });
-              }
-          });
+        if (!valor) {
+            if (layer.options.originalStyle) {
+                layer.setStyle({
+                    ...layer.options.originalStyle,
+                    opacity: 1
+                });
+            }
+        } else if (texto && texto.includes(valor)) {
+            layer.setStyle({
+                color: "#f26df9",
+                weight: 1,
+                fillOpacity: 0.6,
+                opacity: 1
+            });
+            layer.bringToFront();
+        } else {
+            layer.setStyle({
+                color: "#9E9E9E",
+                weight: 0.7,
+                fillOpacity: 0,
+                opacity: 0
+            });
+        }
+    });
 }
 
 function limpiarFiltro() {
@@ -172,7 +180,7 @@ function cargarCapaMz() {
             capasGeoJSON["mz_rub"] = L.geoJson(data, {
                 style: {
                     color: '#2a2a2a',
-                    weight: 1,
+                    weight: 1.5,
                     fillOpacity: document.querySelector(".valuemz_rub").value
                 },
                 onEachFeature: function (feature, layer) {
@@ -306,29 +314,29 @@ function mostrarPanelCapas() {
         cadenaEscritorio += `
           <div class='item-capa'>
               <input type='checkbox' id='${capa.NoGeoserver}' ${capa.AcShape ? 'checked' : ''} onchange='activarCapa("${capa.NoGeoserver}")'>
-              <label class='est${capa.NoGeoserver}' for='${capa.NoGeoserver}'>${capa.NoShape}</label><br>
+              <label for='${capa.NoGeoserver}'>${capa.NoShape}</label><br>
 
               <div>
                 <p class='TextOp'>Opacidad</p>
-                <input type='range' min='0' max='1' step='0.1' value='${capa.OpShape/100}' class='slider-opacidad value${capa.NoGeoserver}' 
-                  onchange='cambiarOpacidad("${capa.NoGeoserver}", this.value)'>
+                <div class='OpBarr'>
+                  <input type='range' min='0' max='1' step='0.1' value='${capa.OpShape/100}' class='slider-opacidad value${capa.NoGeoserver}' 
+                    onchange='cambiarOpacidad("${capa.NoGeoserver}", this.value, this)'>
+                  <span id='porcentaje_${capa.NoGeoserver}' class='porcentaje-opacidad'>${capa.OpShape}%</span>
+                </div>
               </div>  
           </div>
         `;
 
         cadenaMobile += `
           <div class='item-capa'>
-              <input type='checkbox' id='${capa.NoGeoserver}_m' onchange='activarCapa("${capa.NoGeoserver}")'>
+              <input type='checkbox' id='${capa.NoGeoserver}_m' ${capa.AcShape ? 'checked' : ''} onchange='activarCapaMobile("${capa.NoGeoserver}")'>
               <label for='${capa.NoGeoserver}_m'>${capa.NoShape}</label>
           </div>
         `;
-      if (capa.AcShape){
+      if (capa.AcShape){ //si ya viene activar de la BD - mostrarla
         activarCapa(capa.NoGeoserver)
-        activarCapa(capa.NoGeoserver+'_m')
       }
       });
-
-
 
       // Panel de escritorio
       const contenedorEscritorio = document.querySelector("#capasCheckboxContainer");
@@ -338,45 +346,76 @@ function mostrarPanelCapas() {
       if (contenedorMobile) contenedorMobile.innerHTML = cadenaMobile;
       })
       
+
+
     .catch(error => console.error("Error al cargar panel de capas:", error));
 }
 
 mostrarPanelCapas();
 
+
 function activarCapa(nombreCapa) {
   const checkboxDesktop = document.getElementById(nombreCapa);
-  const checkboxMobile = document.getElementById(nombreCapa + "_m");
 
   // Evaluamos si alguno está activado
   const isChecked = (
-    (checkboxDesktop && checkboxDesktop.checked) ||
+    (checkboxDesktop && checkboxDesktop.checked)
+  );
+
+  // Si no existe aún la capa, cargarla
+
+  if (!capasGeoJSON[nombreCapa]) {
+    switch (nombreCapa) {
+      case "espVer_rub": cargarCapaEspVerde(); break;
+      case "parcelario_rub": cargarCapaParcelario(); break;
+      case "sector_rub": cargarCapasSectores(); break;
+      case "mz_rub": cargarCapaMz(); break;
+      case "equipam_rub": cargarCapaEquipam(); break;
+      case "cavas_rub": cargarCapaCavas(); break;
+      case "ejeCalles_rub": cargarCapaEjesCalle(); break;
+    }
+
+    setTimeout(() => {
+      if (capasGeoJSON[nombreCapa]) {
+        if (isChecked) {
+          capasGeoJSON[nombreCapa].addTo(map);
+        }
+        mostrarReferencias();
+      }
+    }, 500);
+    return;
+  }
+
+  if (isChecked) {
+    capasGeoJSON[nombreCapa].addTo(map);
+  } else {
+    map.removeLayer(capasGeoJSON[nombreCapa]);
+  }
+
+  mostrarReferencias();
+}
+
+//CELU
+
+function activarCapaMobile(nombreCapa) {
+  const checkboxMobile = document.getElementById(nombreCapa+'_m');
+
+  // Evaluamos si alguno está activado
+  const isChecked = (
     (checkboxMobile && checkboxMobile.checked)
   );
 
   // Si no existe aún la capa, cargarla
+
   if (!capasGeoJSON[nombreCapa]) {
     switch (nombreCapa) {
-      case "espVer_rub":
-        cargarCapaEspVerde();
-        break;
-      case "parcelario_rub":
-        cargarCapaParcelario();
-        break;
-      case "sector_rub":
-        cargarCapasSectores();
-        break;
-      case "mz_rub":
-        cargarCapaMz();
-        break;
-      case "equipam_rub":
-        cargarCapaEquipam();
-        break;
-      case "cavas_rub":
-        cargarCapaCavas();
-        break;
-      case "ejeCalles_rub":
-        cargarCapaEjesCalle();
-        break;
+      case "espVer_rub": cargarCapaEspVerde(); break;
+      case "parcelario_rub": cargarCapaParcelario(); break;
+      case "sector_rub": cargarCapasSectores(); break;
+      case "mz_rub": cargarCapaMz(); break;
+      case "equipam_rub": cargarCapaEquipam(); break;
+      case "cavas_rub": cargarCapaCavas(); break;
+      case "ejeCalles_rub": cargarCapaEjesCalle(); break;
     }
 
     setTimeout(() => {
@@ -463,13 +502,18 @@ function formatearNombreCapa(nombre) {
 }
 
 // CONTROL DE OPACIDAD CAPA EN PANEL DE CAPAS
-function cambiarOpacidad(nombreCapa, valorOpacidad) {
+function cambiarOpacidad(nombreCapa, valorOpacidad, input = null) {
   const capa = capasGeoJSON[nombreCapa];
   if (capa) {
+    const opacidad = parseFloat(valorOpacidad);
     capa.setStyle({
-      fillOpacity: parseFloat(valorOpacidad),
-      opacity: parseFloat(valorOpacidad)
+      fillOpacity: opacidad,
+      opacity: opacidad
     });
+    const span = document.getElementById(`porcentaje_${nombreCapa}`);
+    if (span) {
+      span.textContent = `${Math.round(opacidad * 100)}%`;
+    }
   }
 }
 
