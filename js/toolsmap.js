@@ -34,6 +34,11 @@ var map = L.map('map', {
         attribution: 'Tiles &copy; Esri'
     });
 
+    var Rubita2023 = L.tileLayer('https://sit.chaco.gob.ar/public/tiles/Piramide_La_Rubita_2023/{z}/{x}/{y}.png', {
+    maxZoom: 22,
+    attribution: ''
+    });
+
     var Rubita2024 = L.tileLayer('https://sit.chaco.gob.ar/public/tiles/Piramide_La_Rubita_2024/{z}/{x}/{y}.png', {
         maxZoom: 22,
         attribution: ''
@@ -43,7 +48,20 @@ var map = L.map('map', {
         maxZoom: 22,
         attribution: ''
     });
-    
+
+//PARA TRAER WMS - ejemplo cdt
+    const overlayLayers = {};
+    const ipgeoserversigide = ('http://idechaco.gob.ar/geoserver/wms') 
+
+    var Cdt137 = L.tileLayer.wms(ipgeoserversigide, {
+              layers: 'idechaco:nr_z1_MCh137',
+              format: 'image/png',
+              transparent: true,
+              opacity: 1,
+              maxZoom: 22
+            });
+          overlayLayers['nr_z1_MCh137'] = Cdt137;
+
 
     // PANEL DE MAPAS BASES 
     var baseMaps = {
@@ -55,9 +73,13 @@ var map = L.map('map', {
     };
 
         var overlayMaps = {
+        "Rubita 2023": Rubita2023,    
         "Rubita 2024": Rubita2024,
-        "Rubita 2025": Rubita2025
+        "Rubita 2025": Rubita2025,
+        "Cdt 137": Cdt137,
     };
+
+
 
     L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
 
@@ -65,3 +87,18 @@ var map = L.map('map', {
     L.control.zoom({
         position: 'topright' 
         }).addTo(map);
+
+
+
+    // Actualizar coordenadas en movimiento del mouse
+    map.on("mousemove", function (e) {
+    const lat = e.latlng.lat.toFixed(6);
+    const lng = e.latlng.lng.toFixed(6);
+    document.getElementById("textoCoordenadas").textContent = `Lat: ${lat}, Long: ${lng}`;
+    });
+
+    L.control.scale({
+    position: 'bottomright', 
+    imperial: false,         
+    maxWidth: 150
+    }).addTo(map);

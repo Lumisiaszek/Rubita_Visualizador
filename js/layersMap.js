@@ -124,53 +124,6 @@ function cargarCapaParcelario() {
         });
 }
 
-// Filtro por parcela
-
-function filtrarPorCategoria() {
-    const valor = document.getElementById("inputCategoria").value.trim().toLowerCase();
-    const botonLimpiar = document.getElementById("btnLimpiar");
-
-    botonLimpiar.style.display = valor ? "inline-block" : "none";
-
-    const capa = capasGeoJSON["parcelario_rub"];
-    if (!capa) return;
-
-    capa.eachLayer(layer => {
-        const props = layer.feature?.properties;
-        const texto = props?.nu_par?.toString().toLowerCase();
-
-        if (!valor) {
-            if (layer.options.originalStyle) {
-                layer.setStyle({
-                    ...layer.options.originalStyle,
-                    opacity: 1
-                });
-            }
-        } else if (texto && texto.includes(valor)) {
-            layer.setStyle({
-                color: "#f26df9",
-                weight: 1,
-                fillOpacity: 0.6,
-                opacity: 1
-            });
-            layer.bringToFront();
-        } else {
-            layer.setStyle({
-                color: "#9E9E9E",
-                weight: 0.7,
-                fillOpacity: 0,
-                opacity: 0
-            });
-        }
-    });
-}
-
-function limpiarFiltro() {
-    document.getElementById("inputCategoria").value = "";
-    document.getElementById("btnLimpiar").style.display = "none";
-    filtrarPorCategoria();
-}
-
 // MANZANAS - RUBITA 
 function cargarCapaMz() {
     const url = ObtenerLinkJsonGeoserver("AMGR", "mz_rub");
@@ -558,3 +511,127 @@ function toggleMobilePanel(nombre) {
     }
   });
 }
+
+// FILTRO PARCELARIO
+
+function abrirPanelFiltro() {
+  const panel = document.getElementById("filtroDinamico");
+
+  if (panel.style.display === "none" || panel.style.display === "") {
+    panel.style.display = "block";
+    construirFormularioFiltro(); 
+  } else {
+    panel.style.display = "none";
+  }
+}
+
+function construirFormularioFiltro() {
+  const capa = capasGeoJSON["parcelario_rub"];
+  if (!capa) return;
+
+  const container = document.getElementById("filtroDinamico");
+  container.innerHTML = ""; 
+
+  const camposFiltrables = ["nu_sector", "nu_mz", "nu_par"];
+  const div = document.createElement("div");
+  div.className = "filtro-parcela";
+
+  const titulo = document.createElement("h4");
+  titulo.textContent = "Filtrar Parcelario Urbano";
+  div.appendChild(titulo);
+
+  camposFiltrables.forEach(campo => {
+    const grupo = document.createElement("div");
+    grupo.className = "filtro-grupo";
+
+    const label = document.createElement("label");
+    label.setAttribute("for", `filtro_${campo}`);
+    label.textContent = `${campo}:`;
+
+    const input = document.createElement("input");
+    input.setAttribute("id", `filtro_${campo}`);
+    input.setAttribute("placeholder", `Filtrar por ${campo}`);
+
+    grupo.appendChild(label);
+    grupo.appendChild(input);
+    div.appendChild(grupo);
+  });
+
+  const botones = document.createElement("div");
+  botones.className = "filtro-botones";
+
+  const btnAplicar = document.createElement("button");
+  btnAplicar.textContent = "Aplicar filtro";
+  btnAplicar.onclick = () => aplicarFiltroCampos(camposFiltrables);
+
+  const btnLimpiar = document.createElement("button");
+  btnLimpiar.textContent = "Limpiar";
+  btnLimpiar.onclick = limpiarFiltroCampos;
+
+  botones.appendChild(btnAplicar);
+  botones.appendChild(btnLimpiar);
+
+  div.appendChild(botones);
+  container.appendChild(div);
+}
+
+function aplicarFiltroCampos(campos) {
+  const capa = capasGeoJSON["parcelario_rub"];
+  if (!capa) return;
+
+  const valores = {};
+  campos.forEach(campo => {
+    valores[campo] = document.getElementById(`filtro_${campo}`).value.trim().toLowerCase();
+  });
+
+  capa.eachLayer(layer => {
+    const props = layer.feature?.properties;
+    const coincide = campos.every(campo => {
+      const val = valores[campo];
+      return !val || (props?.[campo]?.toString().toLowerCase().includes(val));
+    });
+
+    if (coincide) {
+      layer.setStyle({
+        color: "#f26df9",
+        weight: 1,
+        fillOpacity: 0.6,
+        opacity: 1
+      });
+      layer.bringToFront();
+    } else {
+      layer.setStyle({
+        color: "#9E9E9E",
+        weight: 0.7,
+        fillOpacity: 0,
+        opacity: 0
+      });
+    }
+  });
+}
+
+function limpiarFiltroCampos() {
+  const capa = capasGeoJSON["parcelario_rub"];
+  if (!capa) return;
+
+  // Limpiar inputs
+  document.querySelectorAll("#filtroDinamico input").forEach(input => input.value = "");
+
+  capa.eachLayer(layer => {
+    if (layer.options.originalStyle) {
+      layer.setStyle({
+        ...layer.options.originalStyle,
+        opacity: 1
+      });
+    }
+  });
+}
+
+document.addEventListener("click", function (e) {
+  const panel = document.getElementById("filtroDinamico");
+  const boton = document.getElementById("btnAbrirFiltro");
+  if (!panel || !boton) return;
+  if (!panel.contains(e.target) && !boton.contains(e.target)) {
+    panel.style.display = "none";
+  }
+});

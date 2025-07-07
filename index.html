@@ -16,39 +16,43 @@
         <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     </head>
     
-    <body>             
-        <div class="contenedor_titulo">
-            <div class="logos">
-                <a href="https://produccion.chaco.gov.ar/"><img src="./assets/img/logomin_icono.png" alt=""></a>
-                <div class="linea-vertical"></div>
-                <a href="https://sit.chaco.gob.ar/"><img src="./assets/img/logo_icono.png" alt=""></a>
-            </div>
-            <div class="titulomapa">
-                <h2>LA RUBITA - CH 284 | PROYECTO EJECUTIVO</h2> 
-            </div>  
-        </div>
-
-        <div class="contenedorpanel" id="contenedorpanel">
-            <div id="layers-panel">
-                <div class="searchBar">
-                    <img src="./assets/iconos/searchInput.png" alt="">
-                    <input type="text" id="inputCategoria" placeholder="Buscar por parcela" onkeyup="filtrarPorCategoria()" />
-                    <button id="btnLimpiar" onclick="limpiarFiltro()" style="display: none;"><img src="./assets/iconos/searchclean.png" alt=""></button>
+    <body>  
+        <div class="contenedor_sup">          
+            <div class="contenedor_titulo">
+                <div class="logos">
+                    <a href="https://produccion.chaco.gov.ar/"><img src="./assets/img/logomin_icono.png" alt=""></a>
+                    <div class="linea-vertical"></div>
+                    <a href="https://sit.chaco.gob.ar/"><img src="./assets/img/logo_icono.png" alt=""></a>
+                </div>
+                <div class="titulomapa">
+                    <h2>LA RUBITA - CH 284 | PROYECTO EJECUTIVO</h2> 
                 </div> 
             </div>
+        
+            <div class="searchBar">
+                <button id="btnAbrirFiltro" onclick="abrirPanelFiltro()">
+                    <img src="./assets/iconos/searchInput.png" alt="Búsqueda avanzada" title="Búsqueda avanzada" />
+                </button>
+                <div id="filtroDinamico"></div>
+            </div>
+        </div> 
+
+        <div class="contenedorpanel" id="contenedorpanel">
             <div class="scroll-wrapper">
                 <div class="tabsPanel">
                     <button class="tab active" data-tab="capas">Panel de capas</button>
                     <button class="tab" data-tab="referencias">Referencias</button>
-                </div> 
+                </div>
+
                 <div id="tab-capas" class="tab-content active">
                     <div id="capasCheckboxContainer"></div>
                 </div>
 
-                <div id="tab-referencias" class="tab-content">
-                </div> 
+                <div id="tab-referencias" class="tab-content"></div>
             </div>
         </div>
+
+        <div id="tab-referencias" class="tab-content"></div> 
 
         <div class="toggle-tab" id="togglePanel" onclick="togglePanel()">❮</div> 
 
@@ -142,6 +146,10 @@
                 <button onclick="toggleMobilePanel('referencias')"><img src="./assets/iconos/refMobile.png" alt=""></button>
                 <div id="panel-referencias" class="mobile-panel"></div>
             </div>
+        </div>
+
+        <div id="info-coordenadas">
+            <span id="textoSRC">EPSG: 5347</span> | <span id="textoCoordenadas"></span>
         </div>
 
 
