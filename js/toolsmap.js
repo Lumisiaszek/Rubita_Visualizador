@@ -49,21 +49,12 @@ var map = L.map('map', {
         attribution: ''
     });
 
-//PARA TRAER WMS - ejemplo cdt
-    const overlayLayers = {};
-    const ipgeoserversigide = ('http://idechaco.gob.ar/geoserver/wms') 
-
-    var Cdt137 = L.tileLayer.wms(ipgeoserversigide, {
-              layers: 'idechaco:nr_z1_MCh137',
-              format: 'image/png',
-              transparent: true,
-              opacity: 1,
-              maxZoom: 22
-            });
-          overlayLayers['nr_z1_MCh137'] = Cdt137;
 
 
     // PANEL DE MAPAS BASES 
+
+    let currentBaseLayer = esriSatellite;
+
     var baseMaps = {
         "OpenStreetMap": osm,
         "Satelital": esriSatellite,
@@ -76,17 +67,42 @@ var map = L.map('map', {
         "Rubita 2023": Rubita2023,    
         "Rubita 2024": Rubita2024,
         "Rubita 2025": Rubita2025,
-        "Cdt 137": Cdt137,
     };
 
 
+    function toggleLayerPanel() {
+    const panel = document.getElementById("layerPanel");
+    panel.style.display = panel.style.display === "none" ? "block" : "none";
+    }
 
-    L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(map);
+    // Base map selector
+    document.getElementById("baseMapOptions").addEventListener("change", function(e) {
+    if (e.target.name === "baseMap") {
+        map.removeLayer(currentBaseLayer);
+        const newLayer = baseMaps[e.target.value];
+        map.addLayer(newLayer);
+        currentBaseLayer = newLayer;
+    }
+    });
 
+    // Overlay toggles
+    document.getElementById("overlayOptions").addEventListener("change", function(e) {
+        // Validar que el evento viene de un checkbox
+        if (e.target && e.target.type === "checkbox") {
+            const layerName = e.target.value;
+            const layer = overlayMaps[layerName];
 
-    L.control.zoom({
-        position: 'topright' 
-        }).addTo(map);
+            if (layer) {
+                if (e.target.checked) {
+                    map.addLayer(layer);
+                } else {
+                    map.removeLayer(layer);
+                }
+            } else {
+                console.warn('Capa no encontrada para:', layerName);
+            }
+        }
+    });
 
 
 

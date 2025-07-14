@@ -29,12 +29,7 @@
                 </div> 
             </div>
         
-            <div class="searchBar">
-                <button id="btnAbrirFiltro" onclick="abrirPanelFiltro()">
-                    <img src="./assets/iconos/searchInput.png" alt="Búsqueda avanzada" title="Búsqueda avanzada" />
-                </button>
-                <div id="filtroDinamico"></div>
-            </div>
+
         </div> 
 
         <div class="contenedorpanel" id="contenedorpanel">
@@ -57,11 +52,86 @@
         <div class="toggle-tab" id="togglePanel" onclick="togglePanel()">❮</div> 
 
         <div id="contenedor_botones">
+
+            <div class="searchBar" class="tooltip-container">
+                <button id="btnAbrirFiltro" onclick="abrirPanelFiltro()">
+                    <img src="./assets/iconos/searchInput.png" alt="Búsqueda avanzada"/>
+                </button>
+                <div id="filtroDinamico"></div>
+            </div>
+
+
+            <div id="baseMapToggle" class="tooltip-container">
+                <button onclick="toggleLayerPanel()">
+                    <img src="./assets/iconos/baseMaps.png" alt="Mapa base">
+                </button>
+                <div class="custom-tooltip">
+                    <div>
+                        <h3>Selección de Mapa Base</h3>
+                        <p>Elegí el mapa de base que deseas utilizar.</p>
+                        <p>También podes elegir una imagen VANT.</p>
+                    </div>            
+                </div>
+            </div>
+            <div id="layerPanel" style="display: none;" class="custom-panel">
+            <p>Mapa base:</p>
+            <form id="baseMapOptions">
+                <label><input type="radio" name="baseMap" value="OpenStreetMap"> OpenStreetMap</label>
+                <label><input type="radio" name="baseMap" value="Satelital" checked> Satelital</label>
+                <label><input type="radio" name="baseMap" value="CartoDB Gris"> CartoDB Gris</label>
+                <label><input type="radio" name="baseMap" value="ESRI Dark"> ESRI Dark</label>
+                <label><input type="radio" name="baseMap" value="ESRI Topo"> ESRI Topo</label>
+            </form>
+
+            <hr>
+
+            <p>Imágenes VANT Rubita:</p>
+            <form id="overlayOptions">
+                <label><input type="checkbox" value="Rubita 2023">Rubita 2023</label>
+                <label><input type="checkbox" value="Rubita 2024">Rubita 2024</label>
+                <label><input type="checkbox" value="Rubita 2025">Rubita 2025</label>
+            </form>
+            </div>
+
+
+            <div id="zoomControls">
+                <button onclick="map.zoomIn()" title="Acercar">
+                    <img src="./assets/iconos/zoomIn.png" alt="Zoom In">
+                </button>
+                <button onclick="map.zoomOut()" title="Alejar">
+                    <img src="./assets/iconos/zoomOut.png" alt="Zoom Out">
+                </button>
+            </div>
+
+            <div id="homeView" class="tooltip-container">
+                <button onclick="homeView()">
+                <img src="./assets/iconos/homeView.png" alt="Vista inicial">
+                </button>
+                <div class="custom-tooltip">
+                    <div>
+                        <h3>Volver al inicio</h3>
+                        <p>Restaurá la vista incial del mapa.</p>
+                    </div>            
+                </div>
+            </div>
+
+            <div id="screenComp">
+                <button onclick="screenComp()">
+                <img src="./assets/iconos/screenComp.png" alt="Ubicación actual" title="Pantalla completa">
+                </button>
+            </div>
+
+
             <div id="ubicActual">
                 <button onclick="goToMyLocation()">
                 <img src="./assets/iconos/ubication.png" alt="Ubicación actual" title="¿Donde estoy?">
                 </button>
-                <hr>
+            </div>
+
+            <div id="setCoord">
+                <button onclick="setCoord()">
+                <img src="./assets/iconos/setCoord.png" alt="Ubicación actual" title="Buscar por coordenadas">
+                </button>
             </div>
 
             <div id="medirMenu">
@@ -77,14 +147,12 @@
                     </button>
                     <button onclick="startDelete()">
                         <img src="./assets/iconos/H_borr.png" alt="Borrar" title="Borrar">
-                    </button>
+                    </button><br>
                 </div>
             </div>
 
             <div id="drawMenu">
-                <hr>
                 <button id="toggleDrawMenu"><img src="./assets/iconos/H_lapiz.png" alt="Dibujar" title="Dibujar"></button>
-                <hr>
                 <div id="drawButtons">
                     <button onclick="startDraw('marker')"><img src="./assets/iconos/H_ubic.png" alt="Punto" title="Punto"></button>
                     <button onclick="startDraw('polyline')"><img src="./assets/iconos/H_line.png" alt="Linea" title="Linea"></button>
@@ -93,9 +161,23 @@
                     <button onclick="startDraw('circle')"><img src="./assets/iconos/H_circ.png" alt="Circulo" title="Circulo"></button>
                     <hr>
                     <button onclick="startEdit()"><img src="./assets/iconos/H_edit.png" alt="Editar" title="Editar"></button>
-                    <button onclick="startDelete()"><img src="./assets/iconos/H_borr.png" alt="Borrar" title="Borrar"></button>
-                    <hr>
+                    <button onclick="startDelete()"><img src="./assets/iconos/H_borr.png" alt="Borrar" title="Borrar"></button><br>
                 </div>
+            </div>
+
+            <div id="downloadMenu">
+                <a class="btn-download" href="https://drive.google.com/drive/folders/1bYr9kOJxLl1VP-9BiOhl-VuZbThmiTqn?usp=sharing" target="_blank" rel="noopener noreferrer">
+                <img src="./assets/iconos/capasDesc.png" alt="Descargar capas" title="Descargar capas"></a>
+            </div>
+
+            <div id="streetView">
+                <a class="streetView" href="https://drive.google.com/drive/folders/1bYr9kOJxLl1VP-9BiOhl-VuZbThmiTqn?usp=sharing" target="_blank" rel="noopener noreferrer">
+                <img src="./assets/iconos/streetView.png" alt="Descargar capas" title="Descargar capas"></a>
+            </div>
+
+            <div id="shareMap">
+                <a class="streetView" href="https://drive.google.com/drive/folders/1bYr9kOJxLl1VP-9BiOhl-VuZbThmiTqn?usp=sharing" target="_blank" rel="noopener noreferrer">
+                <img src="./assets/iconos/shareMap.png" alt="Descargar capas" title="Descargar capas"></a>
             </div>
 
 
@@ -113,12 +195,6 @@
                         <button class="button-rowcancelar" onclick="closePreview()">Cancelar</button>
                     </div>
                 </div>
-            </div>
-
-            <div id="downloadMenu">
-                <hr>
-                <a class="btn-download" href="https://drive.google.com/drive/folders/1bYr9kOJxLl1VP-9BiOhl-VuZbThmiTqn?usp=sharing" target="_blank" rel="noopener noreferrer">
-                <img src="./assets/iconos/capasDesc.png" alt="Descargar capas" title="Descargar capas"></a>
             </div>
 
         </div>    
