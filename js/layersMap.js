@@ -18,6 +18,7 @@ function togglePanel() {
   const toggle = document.getElementById("togglePanel");
 
   panel.classList.toggle("oculto");
+  toggle.classList.toggle("oculto"); // ← esto es lo que te faltaba
 
   if (panel.classList.contains("oculto")) {
     toggle.innerHTML = "❯"; 

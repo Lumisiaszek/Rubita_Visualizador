@@ -135,10 +135,16 @@ h1, h2, h3, h4, span {
   box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
   z-index: 1001;
   user-select: none;
-  transition: left 0.3s;
+  transition: left 0.3s ease, transform 0.3s ease;
+
 }
 
 .contenedorpanel.oculto + .toggle-tab {
+  left: 15px;
+}
+
+
+.toggle-tab.oculto {
   left: 15px;
 }
 
@@ -151,19 +157,21 @@ h1, h2, h3, h4, span {
   align-items: center;
   justify-content: center;
   border-radius: 2rem;
-  width: 40px;
-  height: 40px;
-  padding: 0.2rem 0.2rem;
-  background-color: white;
+  width: 50px;
+  height: 50px;
+  padding: 0.2rem;
+  background-color: #5059BC;
   box-sizing: border-box;
-  position: relative;
+  position: fixed;   
+  top: 100px;        
+  right: 10px;       
+  z-index: 1000;   
 }
 
 .searchBar img {
-  width: 20px;
+  width: 30px;
   height: auto;
   object-fit: contain;
-  margin-bottom: 15px;
 }
 
 .searchBar button {
@@ -442,9 +450,15 @@ h1, h2, h3, h4, span {
 
 /* ESTILOS HERRAMIENTAS DERECHA */
 
+hr {
+  border: 1px solid #adadad; 
+  width: 25px;
+  margin: 5px 0;              
+}
+
 #contenedor_botones {
     position: absolute;
-    top: 150px; 
+    top: 160px; 
     right: 10px; 
     z-index: 1000;
     display: flex;
@@ -532,10 +546,14 @@ h1, h2, h3, h4, span {
 #homeView img,
 #setCoord img,
 #baseMapToggle img,
-#zoomControls img,
-#streetView img {
+#zoomControls img {
     width: 18px;
     height: auto;
+}
+
+#streetView img {
+  width: 15px;
+  height: auto;
 }
 
 #medirButtons img {
@@ -573,11 +591,6 @@ h1, h2, h3, h4, span {
   height: auto;
 }
 
-#setCoord,
-#zoomControls,
-#downloadMenu {
-  margin-bottom: 0.8rem;
-}
 
 #previewModal {
   position: fixed;

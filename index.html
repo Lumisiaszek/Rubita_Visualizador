@@ -51,15 +51,27 @@
 
         <div class="toggle-tab" id="togglePanel" onclick="togglePanel()">❮</div> 
 
+        <div class="searchBar" class="tooltip-container">
+            <button id="btnAbrirFiltro" onclick="abrirPanelFiltro()">
+                <img src="./assets/iconos/searchInput.png" alt="Búsqueda avanzada"/>
+            </button>
+            <div id="filtroDinamico"></div>
+        </div>
+
         <div id="contenedor_botones">
 
-            <div class="searchBar" class="tooltip-container">
-                <button id="btnAbrirFiltro" onclick="abrirPanelFiltro()">
-                    <img src="./assets/iconos/searchInput.png" alt="Búsqueda avanzada"/>
+            <div id="homeView" class="tooltip-container">
+                <button onclick="homeView()">
+                    <img src="./assets/iconos/homeView.png" alt="Vista inicial">
                 </button>
-                <div id="filtroDinamico"></div>
-            </div>
+                <div class="custom-tooltip">
+                    <div>
+                        <h3>Volver al inicio</h3>
+                        <p>Restaurá la vista incial del mapa.</p>
+                    </div>            
+                </div>
 
+            </div>
 
             <div id="baseMapToggle" class="tooltip-container">
                 <button onclick="toggleLayerPanel()">
@@ -83,8 +95,6 @@
                 <label><input type="radio" name="baseMap" value="ESRI Topo"> ESRI Topo</label>
             </form>
 
-            <hr>
-
             <p>Imágenes VANT Rubita:</p>
             <form id="overlayOptions">
                 <label><input type="checkbox" value="Rubita 2023">Rubita 2023</label>
@@ -93,6 +103,7 @@
             </form>
             </div>
 
+            <hr>
 
             <div id="zoomControls">
                 <button onclick="map.zoomIn()" title="Acercar">
@@ -101,18 +112,6 @@
                 <button onclick="map.zoomOut()" title="Alejar">
                     <img src="./assets/iconos/zoomOut.png" alt="Zoom Out">
                 </button>
-            </div>
-
-            <div id="homeView" class="tooltip-container">
-                <button onclick="homeView()">
-                <img src="./assets/iconos/homeView.png" alt="Vista inicial">
-                </button>
-                <div class="custom-tooltip">
-                    <div>
-                        <h3>Volver al inicio</h3>
-                        <p>Restaurá la vista incial del mapa.</p>
-                    </div>            
-                </div>
             </div>
 
             <div id="screenComp">
@@ -132,6 +131,13 @@
                 <button onclick="setCoord()">
                 <img src="./assets/iconos/setCoord.png" alt="Ubicación actual" title="Buscar por coordenadas">
                 </button>
+            </div>
+
+            <hr>
+
+            <div id="streetView">
+                <a class="streetView" href="https://drive.google.com/drive/folders/1bYr9kOJxLl1VP-9BiOhl-VuZbThmiTqn?usp=sharing" target="_blank" rel="noopener noreferrer">
+                <img src="./assets/iconos/streetView.png" alt="Descargar capas" title="Descargar capas"></a>
             </div>
 
             <div id="medirMenu">
@@ -165,15 +171,13 @@
                 </div>
             </div>
 
+            <hr>
+
             <div id="downloadMenu">
                 <a class="btn-download" href="https://drive.google.com/drive/folders/1bYr9kOJxLl1VP-9BiOhl-VuZbThmiTqn?usp=sharing" target="_blank" rel="noopener noreferrer">
                 <img src="./assets/iconos/capasDesc.png" alt="Descargar capas" title="Descargar capas"></a>
             </div>
 
-            <div id="streetView">
-                <a class="streetView" href="https://drive.google.com/drive/folders/1bYr9kOJxLl1VP-9BiOhl-VuZbThmiTqn?usp=sharing" target="_blank" rel="noopener noreferrer">
-                <img src="./assets/iconos/streetView.png" alt="Descargar capas" title="Descargar capas"></a>
-            </div>
 
             <div id="shareMap">
                 <a class="streetView" href="https://drive.google.com/drive/folders/1bYr9kOJxLl1VP-9BiOhl-VuZbThmiTqn?usp=sharing" target="_blank" rel="noopener noreferrer">
@@ -196,7 +200,6 @@
                     </div>
                 </div>
             </div>
-
         </div>    
 
         <!-- Contenedor para mapa base, no tocar -->

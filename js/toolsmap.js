@@ -85,9 +85,7 @@ var map = L.map('map', {
     }
     });
 
-    // Overlay toggles
     document.getElementById("overlayOptions").addEventListener("change", function(e) {
-        // Validar que el evento viene de un checkbox
         if (e.target && e.target.type === "checkbox") {
             const layerName = e.target.value;
             const layer = overlayMaps[layerName];
